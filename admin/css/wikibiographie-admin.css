@@ -1,0 +1,82 @@
+/**
+ * All of the CSS for your admin-specific functionality should be
+ * included in this file.
+ */
+
+
+#wikibiographie-metabox-table {
+    width: 100%;
+    text-align: left;
+    table-layout: fixed;
+}
+
+#wikibiographie-metabox-table tr th {
+    font-size: 200%;
+    padding: 5px;
+}
+
+#wikibiographie-metabox-table tr td {
+    padding: 5px;
+    vertical-align: top;
+    width: 30%;
+}
+
+#wikibiographie-metabox-table tr td + td {
+    width: 70%;
+}
+
+#wikibiographie-metabox-table tr td input,
+#wikibiographie-metabox-table tr td textarea {
+    width: 100%;
+}
+
+#wikibiographie-metabox-table tr:nth-child(odd) td {
+    background-color: #f6f7f7;
+    padding-bottom: 8px;
+}
+
+#wikibiographie-metabox-table tr td label {
+    display: table;
+    font-weight: bold;
+    font-size: 110%;
+}
+
+div.wiki,
+div.info {
+    padding: 0 2px;
+}
+
+div.info {
+    font-style: italic;
+}
+
+p.hide { display: none; }
+p.error { color: red; }
+
+span.hide { display: none; }
+span.success { color: green; }
+span.error { color: red; }
+
+#empty_cache_section {
+    display: flex;
+    align-items: center;
+    column-gap: 6px;
+}
+
+#refresh_wikidata > img {
+    vertical-align: middle;
+    top: -4px;
+}
+
+img.loading-gif { display: none; }
+
+#wikipedia-metabox-table { }
+
+#wikibiographie-metabox-table input[readonly],
+#wikibiographie-metabox-table textarea[readonly] {
+    border: none;
+    background-color: transparent;
+    padding-left: 0;
+}
+
+textarea, select, input, button { outline: none; }
