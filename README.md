@@ -11,6 +11,19 @@ Cette extension offre la gestion de biographies dont le contenu peut être synch
 
 Le dossier de l'extension doit être déposé dans le dossier `public/wp-content/plugins` du site WordPress.
 
+## Création et publication d'une nouvelle version
+
+Le versionnage de l'extension repose sur [SemVer](https://semver.org/).
+
+Pour publier une nouvelle version stable, les éléments suivants sont à considérer :
+- Dans le fichier `README.txt`, mettre à jour le numéro de version mentionné à la ligne `Stable tag:`
+- Dans le fichier `wikibiographie.php`
+  - mettre à jour le numéro de version mentionné dans le bloc de PHPDoc en début de fichier (ligne `Version:`)
+  - mettre à jour la valeur de la variable globale `WIKIBIOGRAPHIE_VERSION`
+- Sur GitHub, une fois le code poussé, créer une nouvelle version (release) en mentionnant le même numéro de version.
+
+Les numéros de version mentionnés par la release, le tag associé, les fichiers `README.txt` et `wikibiographie.php` doivent être identique.
+
 ## Fichiers et dossiers importants
 
 ### Paramètres de l'extension (admin/class-wikibiographie-settings.php)
