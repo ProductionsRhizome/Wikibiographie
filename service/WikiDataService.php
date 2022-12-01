@@ -19,7 +19,7 @@ class WikiDataService
         $introduction = self::fetchIntroduction($pageTitle);
 
         return array_merge($baseInfo, [
-            'image' => $imageUrl ?? null,
+            'image' => isset($imageUrl) ? $imageUrl : null,
             'introduction' => $introduction,
         ]);
     }
@@ -35,8 +35,8 @@ class WikiDataService
             ]
         ]);
         $body = json_decode($response['body'], true);
-        $rawDateOfBirth = $body['results']['bindings'][0]['dateOfBirthLabel']['value'] ?? null;
-        $rawDateOfDeath = $body['results']['bindings'][0]['dateOfDeathLabel']['value'] ?? null;
+        $rawDateOfBirth = isset($body['results']['bindings'][0]['dateOfBirthLabel']['value']) ? $body['results']['bindings'][0]['dateOfBirthLabel']['value'] : null;
+        $rawDateOfDeath = isset($body['results']['bindings'][0]['dateOfDeathLabel']['value']) ? $body['results']['bindings'][0]['dateOfDeathLabel']['value'] : null;
         if ($rawDateOfBirth) {
             $dateOfBirth = date_format(date_create($rawDateOfBirth), "Y/m/d");
         }
@@ -45,16 +45,16 @@ class WikiDataService
         }
 
         return [
-            'firstName' => $body['results']['bindings'][0]['firstNameLabel']['value'] ?? null,
-            'lastName' => $body['results']['bindings'][0]['lastNameLabel']['value'] ?? null,
-            'pseudonym' => $body['results']['bindings'][0]['pseudonymLabel']['value'] ?? null,
-            'dateOfBirth' => $dateOfBirth ?? null,
-            'placeOfBirth' => $body['results']['bindings'][0]['placeOfBirthLabel']['value'] ?? null,
-            'dateOfDeath' => $dateOfDeath ?? null,
-            'placeOfDeath' => $body['results']['bindings'][0]['placeOfDeathLabel']['value'] ?? null,
-            'occupation' => $body['results']['bindings'][0]['itemDescription']['value'] ?? null,
-            'website' => $body['results']['bindings'][0]['websiteLabel']['value'] ?? null,
-            'entityUrl' => $body['results']['bindings'][0]['item']['value'] ?? null,
+            'firstName' => isset($body['results']['bindings'][0]['firstNameLabel']['value']) ? $body['results']['bindings'][0]['firstNameLabel']['value'] : null,
+            'lastName' => isset($body['results']['bindings'][0]['lastNameLabel']['value']) ? $body['results']['bindings'][0]['lastNameLabel']['value'] : null,
+            'pseudonym' => isset($body['results']['bindings'][0]['pseudonymLabel']['value']) ? $body['results']['bindings'][0]['pseudonymLabel']['value'] : null,
+            'dateOfBirth' => isset($dateOfBirth) ? $dateOfBirth : null,
+            'placeOfBirth' => isset($body['results']['bindings'][0]['placeOfBirthLabel']['value']) ? $body['results']['bindings'][0]['placeOfBirthLabel']['value'] : null,
+            'dateOfDeath' => isset($dateOfDeath) ? $dateOfDeath : null,
+            'placeOfDeath' => isset($body['results']['bindings'][0]['placeOfDeathLabel']['value']) ? $body['results']['bindings'][0]['placeOfDeathLabel']['value'] : null,
+            'occupation' => isset($body['results']['bindings'][0]['itemDescription']['value']) ? $body['results']['bindings'][0]['itemDescription']['value'] : null,
+            'website' => isset($body['results']['bindings'][0]['websiteLabel']['value']) ? $body['results']['bindings'][0]['websiteLabel']['value'] : null,
+            'entityUrl' => isset($body['results']['bindings'][0]['item']['value']) ? $body['results']['bindings'][0]['item']['value'] : null,
         ];
     }
 
@@ -65,7 +65,7 @@ class WikiDataService
             'timeout' => 30,
         ]);
         $body = json_decode($response['body'], true);
-        $fileName = $body['claims']['P18'][0]['mainsnak']['datavalue']['value'] ?? null;
+        $fileName = isset($body['claims']['P18'][0]['mainsnak']['datavalue']['value']) ? $body['claims']['P18'][0]['mainsnak']['datavalue']['value'] : null;
         if (empty($fileName)) {
             return 'https://upload.wikimedia.org/wikipedia/commons/thumb/f/f7/Defaut_2.svg/langfr-260px-Defaut_2.svg.png';
         }
@@ -82,13 +82,13 @@ class WikiDataService
             'timeout' => 30,
         ]);
         $body = json_decode($response['body'], true);
-        $pageIds = $body['query']['pageids'] ?? [];
+        $pageIds = isset($body['query']['pageids']) ? $body['query']['pageids'] : [];
         $pageId = reset($pageIds);
         if ($pageId) {
-            $introduction = $body['query']['pages'][$pageId]['extract'] ?? null;
+            $introduction = isset($body['query']['pages'][$pageId]['extract']) ? $body['query']['pages'][$pageId]['extract'] : null;
         }
 
-        return $introduction ?? null;
+        return isset($introduction) ? $introduction : null;
     }
 
     protected static function extractLastPartOfUri(string $uri): string

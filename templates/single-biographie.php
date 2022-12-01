@@ -13,7 +13,7 @@
             <tr>
                 <th>Prénom</th>
                 <td>
-                    <?php echo $bio['first_name']; ?>
+                    <?php echo esc_attr($bio['first_name']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -21,7 +21,7 @@
             <tr>
                 <th>Nom</th>
                 <td>
-                    <?php echo $bio['last_name']; ?>
+                    <?php echo esc_attr($bio['last_name']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -29,7 +29,7 @@
             <tr>
                 <th>Photo</th>
                 <td>
-                    <img src="<?php echo $bio['image']; ?>" alt="Photo de <?php the_title(); ?>" style="max-width: 200px;">
+                    <img src="<?php echo esc_url($bio['image']); ?>" alt="Photo de <?php the_title(); ?>" style="max-width: 200px;">
                 </td>
             </tr>
         <?php endif; ?>
@@ -37,7 +37,7 @@
             <tr>
                 <th>Pseudonyme</th>
                 <td>
-                    <?php echo $bio['pseudo']; ?>
+                    <?php echo esc_attr($bio['pseudo']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -45,7 +45,7 @@
             <tr>
                 <th>Date de naissance</th>
                 <td>
-                    <?php echo $bio['dob']; ?>
+                    <?php echo esc_attr($bio['dob']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -53,7 +53,7 @@
             <tr>
                 <th>Lieu de naissance</th>
                 <td>
-                    <?php echo $bio['pob']; ?>
+                    <?php echo esc_attr($bio['pob']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -61,7 +61,7 @@
             <tr>
                 <th>Date de décès</th>
                 <td>
-                    <?php echo $bio['dod']; ?>
+                    <?php echo esc_attr($bio['dod']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -69,7 +69,7 @@
             <tr>
                 <th>Lieu de décès</th>
                 <td>
-                    <?php echo $bio['pod']; ?>
+                    <?php echo esc_attr($bio['pod']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -77,7 +77,7 @@
             <tr>
                 <th>Occupation</th>
                 <td>
-                    <?php echo $bio['occupation']; ?>
+                    <?php echo esc_attr($bio['occupation']); ?>
                 </td>
             </tr>
         <?php endif; ?>
@@ -85,7 +85,7 @@
             <tr>
                 <th>Site web</th>
                 <td>
-                    <a href="<?php echo $bio['website']; ?>" target="_blank"><?php echo $bio['website']; ?></a>
+                    <a href="<?php echo esc_url($bio['website']); ?>" target="_blank"><?php echo esc_url($bio['website']); ?></a>
                 </td>
             </tr>
         <?php endif; ?>
@@ -93,9 +93,9 @@
             <tr>
                 <th>Description</th>
                 <td>
-                    <?php echo $bio['introduction']; ?>
+                    <?php echo esc_textarea($bio['introduction']); ?>
                     <?php if(!empty($bio['introduction_complement'])): ?>
-                        <?php echo $bio['introduction_complement']; ?>
+                        <?php echo esc_textarea($bio['introduction_complement']); ?>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -104,7 +104,7 @@
 
     <?php if(!empty($bio['wikipedia_url'])): ?>
         <div class="source">
-            <a target="_blank" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">Contenu soumis à la licence CC-BY-SA 3.0</a>. Source : Article <em><a target="_blank" href="<?php echo $bio['wikipedia_url'] ?>"><?php echo the_title(); ?></a></em> de <a target="_blank" href="https://www.wikipedia.org/">Wikipédia</a></div>
+            <a target="_blank" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">Contenu soumis à la licence CC-BY-SA 3.0</a>. Source : Article <em><a target="_blank" href="<?php echo esc_url($bio['wikipedia_url']) ?>"><?php echo the_title(); ?></a></em> de <a target="_blank" href="https://www.wikipedia.org/">Wikipédia</a></div>
         </div>
     <?php endif; ?>
 
