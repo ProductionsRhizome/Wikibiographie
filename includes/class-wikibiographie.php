@@ -83,7 +83,6 @@ class Wikibiographie
         $this->load_dependencies();
         $this->set_locale();
         $this->define_admin_hooks();
-        $this->init_updater();
 
         $this->loader->add_action('init', $this, 'register_biographie_post_type');
         $this->loader->add_action('wp_ajax_fetch_wikidata', $this, 'ajax_fetch_wikidata');
@@ -138,11 +137,6 @@ class Wikibiographie
          */
         require_once plugin_dir_path(dirname(__FILE__)) . 'admin/class-wikibiographie-settings.php';
 
-        /**
-         * The class responsible for fetching updates of the plugin.
-         */
-        require_once plugin_dir_path(dirname(__FILE__)) . 'includes/class-wikibiographie-updater.php';
-
         $this->loader = new Wikibiographie_Loader();
     }
 
@@ -178,20 +172,6 @@ class Wikibiographie
 
         $this->loader->add_action('add_meta_boxes_biographie', $this, 'register_biographie_meta_box');
         $this->loader->add_action('save_post', $this, 'save_biographie_meta_box_data');
-    }
-
-    /**
-     * Initialize the updater of the plugin.
-     *
-     * @since    1.0.0
-     * @access   private
-     */
-    private function init_updater()
-    {
-        $plugin_updater = new Wikibiographie_Updater(plugin_dir_path(dirname(__FILE__)) . '/wikibiographie.php');
-        $plugin_updater->set_username(self::DEFAULT_USERNAME);
-        $plugin_updater->set_repository(self::DEFAULT_REPOSITORY);
-        $plugin_updater->initialize();
     }
 
     /**
@@ -397,7 +377,7 @@ class Wikibiographie
             $meta['_biographie_thumbnail'] = $thumbnail;
         }
         $wiki_data = null;
-        if (!is_null($meta['_biographie_custom_wikipedia_url'] ?? null)) {
+        if (isset($meta['_biographie_custom_wikipedia_url']) && !is_null($meta['_biographie_custom_wikipedia_url'])) {
             $wiki_data = $this->get_cached_wiki_data($post_id, $meta['_biographie_custom_wikipedia_url']);
         }
         if (!empty($wiki_data)) {
@@ -413,7 +393,7 @@ class Wikibiographie
         // looking for an already attached featured image
         $id = get_post_meta($post_id, '_biographie_attached_featured_image_id', true);
         if (false !== $id) {
-            $old_image_path_info = pathinfo(get_attached_file($id) ?? '');
+            $old_image_path_info = !is_null(get_attached_file($id)) ? pathinfo(get_attached_file($id)) : pathinfo('');
             // comparing extension and filename of tha attached featured image and the new image
             if (isset($old_image_path_info['extension']) && $old_image_path_info['extension'] === $image_path_info['extension']
             && false !== strpos($old_image_path_info['filename'], $image_path_info['filename'])) {
@@ -423,7 +403,7 @@ class Wikibiographie
             }
         }
 
-        $image_name = $image_path_info['basename'] ?? null;
+        $image_name = isset($image_path_info['basename']) ? $image_path_info['basename'] : null;
         if (is_null($image_name)) {
             throw new \Exception('Could not retrieve image name from its url');
         }
@@ -438,9 +418,10 @@ class Wikibiographie
             $file = $upload_dir['basedir'] . '/' . $filename;
         }
         ini_set('user_agent', 'Wikibiographie/1.0 (https://productionsrhizome.org; wikibiographie@productionsrhizome.org)');
-        $image_data = file_get_contents($image_url); // Get image data
+        $response = wp_remote_get($image_url); // Get image data
+        $image_data = wp_remote_retrieve_body($response);
         // Create the image  file on the server
-        file_put_contents($file, $image_data);
+        file_put_contents($file, strval($image_data));
 
         // Check image file type
         $wp_filetype = wp_check_filetype($filename, null);
@@ -508,33 +489,36 @@ class Wikibiographie
         $options = get_option('wikibiographie_options');
 
         $wiki = [
-            'first_name' => $meta['_biographie_wiki_first_name'] ?? null,
-            'last_name' => $meta['_biographie_wiki_last_name'] ?? null,
-            'image' => $meta['_biographie_wiki_image'] ?? null,
-            'pseudo' => $meta['_biographie_wiki_pseudonym'] ?? null,
-            'dob' => $meta['_biographie_wiki_date_of_birth'] ?? null,
-            'pob' => $meta['_biographie_wiki_place_of_birth'] ?? null,
-            'dod' => $meta['_biographie_wiki_date_of_death'] ?? null,
-            'pod' => $meta['_biographie_wiki_place_of_death'] ?? null,
-            'occupation' => $meta['_biographie_wiki_occupation'] ?? null,
-            'website' => $meta['_biographie_wiki_website'] ?? null,
-            'introduction' => $this->preview($meta['_biographie_wiki_introduction'] ?? null, $options['_wikibiographie_maximum_description_length_in_characters']),
+            'first_name' => isset($meta['_biographie_wiki_first_name']) ? $meta['_biographie_wiki_first_name'] : null,
+            'last_name' => isset($meta['_biographie_wiki_last_name']) ? $meta['_biographie_wiki_last_name'] : null,
+            'image' => isset($meta['_biographie_wiki_image']) ? $meta['_biographie_wiki_image'] : null,
+            'pseudo' => isset($meta['_biographie_wiki_pseudonym']) ? $meta['_biographie_wiki_pseudonym'] : null,
+            'dob' => isset($meta['_biographie_wiki_date_of_birth']) ? $meta['_biographie_wiki_date_of_birth'] : null,
+            'pob' => isset($meta['_biographie_wiki_place_of_birth']) ? $meta['_biographie_wiki_place_of_birth'] : null,
+            'dod' => isset($meta['_biographie_wiki_date_of_death']) ? $meta['_biographie_wiki_date_of_death'] : null,
+            'pod' => isset($meta['_biographie_wiki_place_of_death']) ? $meta['_biographie_wiki_place_of_death'] : null,
+            'occupation' => isset($meta['_biographie_wiki_occupation']) ? $meta['_biographie_wiki_occupation'] : null,
+            'website' => isset($meta['_biographie_wiki_website']) ? $meta['_biographie_wiki_website'] : null,
+            'introduction' => $this->preview(
+                isset($meta['_biographie_wiki_introduction']) ? $meta['_biographie_wiki_introduction'] : null,
+                $options['_wikibiographie_maximum_description_length_in_characters']
+            ),
             'introduction_complement' => null,
         ];
 
         $custom = [
-            'first_name' => $meta['_biographie_custom_first_name'] ?? null,
-            'last_name' => $meta['_biographie_custom_last_name'] ?? null,
+            'first_name' => isset($meta['_biographie_custom_first_name']) ? $meta['_biographie_custom_first_name'] : null,
+            'last_name' => isset($meta['_biographie_custom_last_name']) ? $meta['_biographie_custom_last_name'] : null,
             'image' => get_the_post_thumbnail_url(),
-            'pseudo' => $meta['_biographie_custom_pseudo'] ?? null,
-            'dob' => $meta['_biographie_custom_date_naissance'] ?? null,
-            'pob' => $meta['_biographie_custom_lieu_naissance'] ?? null,
-            'dod' => $meta['_biographie_custom_date_deces'] ?? null,
-            'pod' => $meta['_biographie_custom_lieu_deces'] ?? null,
-            'occupation' => $meta['_biographie_custom_occupation'] ?? null,
-            'website' => $meta['_biographie_custom_site_officiel'] ?? null,
-            'introduction' => $meta['_biographie_custom_description'] ?? null,
-            'introduction_complement' => $meta['_biographie_custom_description_complementaire'] ?? null,
+            'pseudo' => isset($meta['_biographie_custom_pseudo']) ? $meta['_biographie_custom_pseudo'] : null,
+            'dob' => isset($meta['_biographie_custom_date_naissance']) ? $meta['_biographie_custom_date_naissance'] : null,
+            'pob' => isset($meta['_biographie_custom_lieu_naissance']) ? $meta['_biographie_custom_lieu_naissance'] : null,
+            'dod' => isset($meta['_biographie_custom_date_deces']) ? $meta['_biographie_custom_date_deces'] : null,
+            'pod' => isset($meta['_biographie_custom_lieu_deces']) ? $meta['_biographie_custom_lieu_deces'] : null,
+            'occupation' => isset($meta['_biographie_custom_occupation']) ? $meta['_biographie_custom_occupation'] : null,
+            'website' => isset($meta['_biographie_custom_site_officiel']) ? $meta['_biographie_custom_site_officiel'] : null,
+            'introduction' => isset($meta['_biographie_custom_description']) ? $meta['_biographie_custom_description'] : null,
+            'introduction_complement' => isset($meta['_biographie_custom_description_complementaire']) ? $meta['_biographie_custom_description_complementaire'] : null,
         ];
 
         $mergeBio = function ($wiki, $custom) {
@@ -567,7 +551,7 @@ class Wikibiographie
         ];
 
         foreach ($settings_mapping as $attr => $setting) {
-            if (!($options[$setting] ?? true)) {
+            if (isset($options[$setting]) && !($options[$setting])) {
                 unset($bio[$attr]);
             }
         }
@@ -588,13 +572,8 @@ class Wikibiographie
      */
     public function save_biographie_meta_box_data($post_id)
     {
-        // Check if our nonce is set.
-        if (! isset($_POST['wikibiographie_nonce'])) {
-            return;
-        }
-
         // Verify that the nonce is valid.
-        if (! wp_verify_nonce($_POST['wikibiographie_nonce'], 'wikibiographie_nonce')) {
+        if (! wp_verify_nonce(isset($_POST['wikibiographie_nonce']) ? $_POST['wikibiographie_nonce'] : '', 'wikibiographie_nonce')) {
             return;
         }
 
@@ -604,7 +583,7 @@ class Wikibiographie
         }
 
         // Check the user's permissions.
-        if (isset($_POST['post_type']) && 'page' == $_POST['post_type']) {
+        if (isset($_POST['post_type']) && 'page' === sanitize_text_field($_POST['post_type'])) {
             if (! current_user_can('edit_page', $post_id)) {
                 return;
             }
@@ -615,7 +594,7 @@ class Wikibiographie
         }
 
         $old_url = get_post_meta($post_id, '_biographie_custom_wikipedia_url', true);
-        $new_url = wp_strip_all_tags($_POST['_biographie_custom_wikipedia_url']);
+        $new_url = sanitize_url($_POST['_biographie_custom_wikipedia_url']);
         if ($old_url !== $new_url) {
             // the URL has changed, need to empty all cached data from Wikipedia in post meta
             delete_post_meta($post_id, '_biographie_wiki_first_name');
@@ -631,7 +610,7 @@ class Wikibiographie
             delete_post_meta($post_id, '_biographie_wiki_image');
         }
 
-        $this->fetch_and_cache_wiki_data($post_id, $_POST['_biographie_custom_wikipedia_url']);
+        $this->fetch_and_cache_wiki_data($post_id, sanitize_url($_POST['_biographie_custom_wikipedia_url']));
 
         // Sanitize user input.
         $custom_values = [
@@ -677,6 +656,7 @@ class Wikibiographie
 
     public function fetch_and_cache_wiki_data($post_id, $url): bool
     {
+        $url = sanitize_url($url);
         $fresh_data = $this->fetch_wikidata($url);
         if (is_null($fresh_data['firstName'])) {
             // if firstName is null, call to wikidata APIs probably didn't work
@@ -713,7 +693,9 @@ class Wikibiographie
         set_transient(
             '_biographie_wiki_'.$post_id,
             $wiki_data,
-            get_option('wikibiographie_options')['_wikibiographie_cache_expiration_in_seconds'] ?? MONTH_IN_SECONDS
+            isset(get_option('wikibiographie_options')['_wikibiographie_cache_expiration_in_seconds'])
+                ? get_option('wikibiographie_options')['_wikibiographie_cache_expiration_in_seconds']
+                : MONTH_IN_SECONDS
         );
     }
 

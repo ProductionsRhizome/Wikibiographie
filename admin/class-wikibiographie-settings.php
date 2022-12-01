@@ -154,11 +154,11 @@ class WikiBiographie_Settings_Page
     {
         $options = $this->get_options();
         $errors = get_settings_errors('wikibiographie_max_char_errors');
-        echo sprintf('<input name="wikibiographie_options[%s]" id="%s" type="text" value="%s" />', $field['id'], $field['id'], $options[$field['id']]);
+        echo sprintf('<input name="wikibiographie_options[%s]" id="%s" type="text" value="%s" />', esc_attr($field['id']), esc_attr($field['id']), esc_attr($options[$field['id']]));
 
         if (!empty($errors)) {
             foreach ($errors as $error) {
-                echo sprintf('<p class="error">%s</p>', $error['message']);
+                echo sprintf('<p class="error">%s</p>', esc_attr($error['message']));
             }
         }
 
@@ -178,7 +178,7 @@ class WikiBiographie_Settings_Page
         </div>
         <?php
         if (!empty($field['tip'])) {
-            echo sprintf('<p class="description">%s</p>', $field['tip']);
+            echo sprintf('<p class="description">%s</p>', esc_attr($field['tip']));
         }
     }
 
@@ -191,13 +191,13 @@ class WikiBiographie_Settings_Page
             foreach ($field['options'] as $key => $label) {
                 $choices.= printf(
                     '<input type="checkbox" name="wikibiographie_options[%1$s]" value="true" %2$s><label for="%1$s">%3$s</label><br>',
-                    $key,
+                    esc_attr($key),
                     checked($options[$key], true, false),
-                    $label
+                    esc_attr($label)
                 );
             }
             if (!empty($field['tip'])) {
-                echo sprintf('<p class="description">%s</p>', $field['tip']);
+                echo sprintf('<p class="description">%s</p>', esc_attr($field['tip']));
             }
         }
     }
@@ -211,9 +211,9 @@ class WikiBiographie_Settings_Page
             foreach ($field['options'] as $key => $label) {
                 $choices.= sprintf(
                     '<option value="%s" %s>%s</option>',
-                    $key,
+                    esc_attr($key),
                     selected($options[$field['id']], $key, false),
-                    $label
+                    esc_attr($label)
                 );
             }
             if ($field['type'] === 'multiselect') {
@@ -221,12 +221,12 @@ class WikiBiographie_Settings_Page
             }
             printf(
                 '<select name="wikibiographie_options[%1$s]" id="%1$s" %2$s>%3$s</select>',
-                $field['id'],
-                $attr,
+                esc_attr($field['id']),
+                esc_attr($attr),
                 $choices
             );
             if (!empty($field['tip'])) {
-                echo sprintf('<p class="description">%s</p>', $field['tip']);
+                echo sprintf('<p class="description">%s</p>', esc_attr($field['tip']));
             }
         }
     }
