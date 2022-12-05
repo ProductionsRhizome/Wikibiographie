@@ -163,7 +163,7 @@ class WikiBiographie_Settings_Page
         }
 
         if (!empty($field['tip'])) {
-            echo sprintf('<p class="description">%s</p>', $field['tip']);
+            echo sprintf('<p class="description">%s</p>', wp_kses_post($field['tip']));
         }
     }
 

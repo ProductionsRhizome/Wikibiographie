@@ -28,7 +28,7 @@
             <td>
                 <button class="button" id="refresh_wikidata" type="button">
                     <?php _e("Rafraîchir les informations biographiques Wikipédia", 'wikibiographie'); ?>
-                    <img src="<?php echo plugin_dir_url(__FILE__) . '../loading.gif' ?>" alt="Loading..." class="loading-gif" id="bio-loading">
+                    <img src="<?php echo esc_attr(plugin_dir_url(__FILE__) . '../loading.gif') ?>" alt="Loading..." class="loading-gif" id="bio-loading">
                 </button>
                 <p class="error hide"></p>
             </td>
