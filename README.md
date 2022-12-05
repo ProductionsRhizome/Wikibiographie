@@ -2,6 +2,10 @@
 
 Cette extension offre la gestion de biographies dont le contenu peut être synchronisé avec celui de Wikipédia en français.
 
+## Guide de l'utilisateur
+
+[Consulter le guide de l'utilisateur (pdf)](https://productionsrhizome.org/wp-content/uploads/WikiBiographie_guide_utilisateur_De%CC%81cembre-20-22.pdf)  
+
 ## Installation de l'extension
 
 Le dossier de l'extension doit être déposé dans le dossier `public/wp-content/plugins` du site WordPress.
