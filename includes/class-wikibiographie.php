@@ -220,7 +220,7 @@ class Wikibiographie
 
     public function ajax_fetch_wikidata()
     {
-        $url = $_POST['wikipediaUrl'];
+        $url = esc_url($_POST['wikipediaUrl']);
 
         try {
             if (empty($url)) {
