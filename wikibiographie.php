@@ -15,8 +15,8 @@
  * @wordpress-plugin
  * Plugin Name:       WikiBiographie
  * Plugin URI:        https://github.com/ProductionsRhizome/Wikibiographie
- * Description:       Gestion de biographies et récupération d'informations depuis Wikipédia en français.
- * Version:           1.0.0
+ * Description:       Fetch and manage biographies from Wikipedia.
+ * Version:           1.0.1
  * Author:            Productions Rhizome
  * Author URI:        https://www.productionsrhizome.org
  * License:           GPL-2.0+
@@ -35,7 +35,7 @@ if (! defined('WPINC')) {
  * Start at version 1.0.0 and use SemVer - https://semver.org
  * Rename this for your plugin and update it as you release new versions.
  */
-define('WIKIBIOGRAPHIE_VERSION', '1.0.0');
+define('WIKIBIOGRAPHIE_VERSION', '1.0.1');
 
 /**
  * The code that runs during plugin activation.

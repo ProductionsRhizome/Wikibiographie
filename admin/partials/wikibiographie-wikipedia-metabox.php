@@ -20,15 +20,15 @@
     <table id="wikipedia-metabox-table">
         <tr>
             <td>
-                <label for="_biographie_custom_wikipedia_url"><?php _e("URL de la page Wikipédia", 'wikibiographie'); ?></label><br>
+                <label for="_biographie_custom_wikipedia_url"><?php _e("Wikipedia URL", 'wikibiographie'); ?></label><br>
                 <input type="url" pattern="https://.*" name="_biographie_custom_wikipedia_url" value="<?php echo !empty($custom_data['_biographie_custom_wikipedia_url']) ? esc_url($custom_data['_biographie_custom_wikipedia_url']) : '' ?>" style="width: 400px;">
             </td>
         </tr>
         <tr>
             <td>
                 <button class="button" id="refresh_wikidata" type="button">
-                    <?php _e("Rafraîchir les informations biographiques Wikipédia", 'wikibiographie'); ?>
-                    <img src="<?php echo esc_attr(plugin_dir_url(__FILE__) . '../loading.gif') ?>" alt="Loading..." class="loading-gif" id="bio-loading">
+                    <?php _e("Refresh Wikipedia info", 'wikibiographie'); ?>
+                    <img src="<?php echo esc_attr(plugin_dir_url(__FILE__) . '../loading.gif') ?>" alt="<?php _e('Loading...', 'wikibiographie'); ?>" class="loading-gif" id="bio-loading">
                 </button>
                 <p class="error hide"></p>
             </td>

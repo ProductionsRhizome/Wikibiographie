@@ -29,8 +29,8 @@ class WikiBiographie_Settings_Page
 
     public function wph_create_settings()
     {
-        $page_title = 'Configuration de WikiBiographie';
-        $menu_title = 'WikiBiographie';
+        $page_title = __('WikiBiographie configuration', 'wikibiographie');
+        $menu_title = __('WikiBiographie', 'wikibiographie');
         $capability = 'manage_options';
         $slug = 'wikibiographie';
         $callback = array($this, 'wph_settings_content');
@@ -44,9 +44,9 @@ class WikiBiographie_Settings_Page
             <form method="POST" action="options.php">
                 <?php
                     settings_fields('wikibiographie');
-        do_settings_sections('wikibiographie');
-        submit_button();
-        ?>
+                    do_settings_sections('wikibiographie');
+                    submit_button();
+                ?>
             </form>
         </div> <?php
     }
@@ -54,7 +54,7 @@ class WikiBiographie_Settings_Page
     public function wph_setup_sections()
     {
         add_settings_section('wikibiographie_reset_cache_section', 'Actions', array(), 'wikibiographie');
-        add_settings_section('wikibiographie_section', 'Paramètres de WikiBiographie', array(), 'wikibiographie');
+        add_settings_section('wikibiographie_section', __('WikiBiographie parameters', 'wikibiographie'), array(), 'wikibiographie');
     }
 
     public function wph_setup_fields()
@@ -62,54 +62,54 @@ class WikiBiographie_Settings_Page
         $fields = array(
             array(
                 'section' => 'wikibiographie_section',
-                'label' => __('Durée de mise en cache des biographies provenant de Wikipédia', 'wikibiographie'),
+                'label' => __('Cache duration', 'wikibiographie'),
                 'id' => '_wikibiographie_cache_expiration_in_seconds',
                 'type' => 'select',
                 'options' => array(
-                    DAY_IN_SECONDS => '1 jour',
-                    WEEK_IN_SECONDS => '1 semaine (7 jours)',
-                    MONTH_IN_SECONDS => '1 mois (30 jours)',
-                    3 * MONTH_IN_SECONDS => '3 mois (90 jours)',
-                    6 * MONTH_IN_SECONDS => '6 mois (180 jours)',
+                    DAY_IN_SECONDS => __('1 day', 'wikibiographie'),
+                    WEEK_IN_SECONDS => __('1 week (7 days)', 'wikibiographie'),
+                    MONTH_IN_SECONDS => __('1 month (30 days)', 'wikibiographie'),
+                    3 * MONTH_IN_SECONDS => __('3 months (90 days)', 'wikibiographie'),
+                    6 * MONTH_IN_SECONDS => __('6 months (180 days)', 'wikibiographie'),
                 ),
                 'callback' => 'dropdown_callback',
-                'tip' => 'La durée choisie n\'affectera pas les biographies déjà mises en cache tant qu\'elles ne seront pas expirées ou manuellement rafraîchies.',
+                'tip' => __('The choosen duration won\'t affect current biographies until they are expired or manually refreshed.', 'wikibiographie'),
             ),
             array(
                 'section' => 'wikibiographie_section',
-                'label' => __('Nombre maximum de caractères à afficher pour les descriptions', 'wikibiographie'),
+                'label' => __('Maximum characters for descriptions', 'wikibiographie'),
                 'id' => '_wikibiographie_maximum_description_length_in_characters',
                 'type' => 'input',
                 'callback' => 'input_callback',
-                'tip' => 'Saisir 0 pour ne pas limiter le nombre de caractères.<br>WikiBiographie essaie dans la mesure du possible de tronquer le texte en fin de phrase.<br>À noter que si la première phrase est plus longue que le nombre de caractères choisi, la troncature s\'effectue plutôt à la fin d\'un mot.',
+                'tip' => __('Enter 0 for no limit.', 'wikibiographie'),
             ),
             array(
                 'section' => 'wikibiographie_section',
-                'label' => __('Choix des informations à afficher', 'wikibiographie'),
+                'label' => __('Choose information do display', 'wikibiographie'),
                 'id' => '_wikibiographie_displayed_data',
                 'options' => array(
-                    'display_first_name' => 'Prénom',
-                    'display_last_name' => 'Nom',
-                    'display_pseudonym' => 'Pseudonyme',
-                    'display_photo' => 'Photo',
-                    'display_date_of_birth' => 'Date de naissance',
-                    'display_place_of_birth' => 'Lieu de naissance',
-                    'display_date_of_death' => 'Date de décès',
-                    'display_place_of_death' => 'Lieu de décès',
-                    'display_occupation' => 'Occupation',
-                    'display_website' => 'Site officiel',
-                    'display_description' => 'Description et description complémentaire',
+                    'display_first_name' => __('First name', 'wikibiographie'),
+                    'display_last_name' => __('Last name', 'wikibiographie'),
+                    'display_pseudonym' => __('Nickname', 'wikibiographie'),
+                    'display_photo' => __('Photo', 'wikibiographie'),
+                    'display_date_of_birth' => __('Date of birth', 'wikibiographie'),
+                    'display_place_of_birth' => __('Place of birth', 'wikibiographie'),
+                    'display_date_of_death' => __('Date of death', 'wikibiographie'),
+                    'display_place_of_death' => __('Place of death', 'wikibiographie'),
+                    'display_occupation' => __('Occupation', 'wikibiographie'),
+                    'display_website' => __('Official website', 'wikibiographie'),
+                    'display_description' => __('Description and complimentary description', 'wikibiographie'),
                 ),
                 'callback' => 'checkbox_callback',
-                'tip' => 'Seules les informations sélectionnées s\'affichent sur la page d\'une biographie',
+                'tip' => __('Only the selected information will be displayed in the biography.', 'wikibiographie'),
             ),
             array(
                 'section' => 'wikibiographie_reset_cache_section',
-                'label' => __('Biographies Wikipédia en cache', 'wikibiographie'),
+                'label' => __('Cached biographies', 'wikibiographie'),
                 'id' => '_wikibiographie_erase_cache',
                 'type' => 'button',
                 'callback' => 'button_callback',
-                'tip' => 'Les données de chaque biographie Wikipédia seront récupérées et remises en cache à la prochaine visite.',
+                'tip' => __('The biography data will be fetched and put into cache upon the next visit.', 'wikibiographie'),
             ),
         );
 
@@ -132,12 +132,12 @@ class WikiBiographie_Settings_Page
         }
 
         if (!is_numeric($data['_wikibiographie_maximum_description_length_in_characters'])) {
-            add_settings_error('wikibiographie_max_char_errors', 'wikibiographie_message_max_char_numeric', __('Le nombre de caractères maximum pour les descriptions doit être un nombre.', 'wikibiographie'), 'error');
+            add_settings_error('wikibiographie_max_char_errors', 'wikibiographie_message_max_char_numeric', __('The maximum description length must be a number.', 'wikibiographie'), 'error');
             return $old_options;
         }
 
         if ((int) $data['_wikibiographie_maximum_description_length_in_characters'] < 0 || (int) $data['_wikibiographie_maximum_description_length_in_characters'] > 5000) {
-            add_settings_error('wikibiographie_max_char_errors', 'wikibiographie_message_max_char_values', __('Le nombre de caractères maximum pour les descriptions doit être plus grand ou égal à 0 et plus petit que 5000.', 'wikibiographie'), 'error');
+            add_settings_error('wikibiographie_max_char_errors', 'wikibiographie_message_max_char_values', __('The number of characters must be greater than 0 and less than 5000.', 'wikibiographie'), 'error');
             return $old_options;
         }
         foreach (array_keys($data) as $k) {
@@ -171,8 +171,8 @@ class WikiBiographie_Settings_Page
     { ?>
         <div id="empty_cache_section">
             <button class="button" id="empty_cache" type="button">
-                <?php _e("Vider les données mises en cache", 'wikibiographie'); ?>
-                <img src="<?php echo plugin_dir_url(__FILE__) . 'loading.gif' ?>" alt="Loading..." class="loading-gif" id="empty_cache_loading">
+                <?php _e("Empty cache data", 'wikibiographie'); ?>
+                <img src="<?php echo plugin_dir_url(__FILE__) . 'loading.gif' ?>" alt="<?php _e('Loading...', 'wikibiographie'); ?>" class="loading-gif" id="empty_cache_loading">
             </button>
             <span class="result_msg" class="hide"></span>
         </div>

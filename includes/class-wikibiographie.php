@@ -224,7 +224,7 @@ class Wikibiographie
 
         try {
             if (empty($url)) {
-                throw new Exception('Vous devez fournir un URL Wikipédia valide.');
+                throw new Exception(__('You must provide a valid Wikipedia URL.', 'wikibiographie'));
             }
 
             $data = $this->fetch_wikidata($url);
@@ -252,20 +252,20 @@ class Wikibiographie
             'label'  => esc_html__('Biographies', 'text-domain'),
             'labels' => [
                 'menu_name'          => esc_html__('Biographies', 'wikibiographie'),
-                'name_admin_bar'     => esc_html__('Biographie', 'wikibiographie'),
-                'add_new'            => esc_html__('Ajouter une biographie', 'wikibiographie'),
-                'add_new_item'       => esc_html__('Nouvelle biographie', 'wikibiographie'),
-                'new_item'           => esc_html__('Nouvelle biographie', 'wikibiographie'),
-                'edit_item'          => esc_html__('Modifier la biographie', 'wikibiographie'),
-                'view_item'          => esc_html__('Voir la biographie', 'wikibiographie'),
-                'update_item'        => esc_html__('Modifier la biographie', 'wikibiographie'),
-                'all_items'          => esc_html__('Toutes les biographies', 'wikibiographie'),
-                'search_items'       => esc_html__('Rechercher une biographie', 'wikibiographie'),
-                'parent_item_colon'  => esc_html__('Biographie parente', 'wikibiographie'),
-                'not_found'          => esc_html__('Aucune biographie trouvée', 'wikibiographie'),
-                'not_found_in_trash' => esc_html__('Aucune biographie dans la corbeille', 'wikibiographie'),
+                'name_admin_bar'     => esc_html__('Biography', 'wikibiographie'),
+                'add_new'            => esc_html__('Add a biography', 'wikibiographie'),
+                'add_new_item'       => esc_html__('New biography', 'wikibiographie'),
+                'new_item'           => esc_html__('New biography', 'wikibiographie'),
+                'edit_item'          => esc_html__('Edit biography', 'wikibiographie'),
+                'view_item'          => esc_html__('View biography', 'wikibiographie'),
+                'update_item'        => esc_html__('Edit biography', 'wikibiographie'),
+                'all_items'          => esc_html__('All biographies', 'wikibiographie'),
+                'search_items'       => esc_html__('Search for a biography', 'wikibiographie'),
+                'parent_item_colon'  => esc_html__('Parent biography', 'wikibiographie'),
+                'not_found'          => esc_html__('No biography found', 'wikibiographie'),
+                'not_found_in_trash' => esc_html__('No biography in the trash', 'wikibiographie'),
                 'name'               => esc_html__('Biographies', 'wikibiographie'),
-                'singular_name'      => esc_html__('Biographie', 'wikibiographie'),
+                'singular_name'      => esc_html__('Biography', 'wikibiographie'),
             ],
             'public'              => true,
             'exclude_from_search' => false,
@@ -304,12 +304,12 @@ class Wikibiographie
     {
         add_meta_box(
             'biographie',
-            __('Wikipédia', 'wikibiographie'),
+            __('Wikipedia', 'wikibiographie'),
             [$this, 'wikipedia_meta_box_callback']
         );
         add_meta_box(
             'wikipedia',
-            __('Informations biographiques', 'wikibiographie'),
+            __('Biographic informations', 'wikibiographie'),
             [$this, 'wikibiographie_meta_box_callback']
         );
     }
@@ -405,7 +405,7 @@ class Wikibiographie
 
         $image_name = isset($image_path_info['basename']) ? $image_path_info['basename'] : null;
         if (is_null($image_name)) {
-            throw new \Exception('Could not retrieve image name from its url');
+            throw new \Exception(__('Could not retrieve image name from its url', 'wikibiographie'));
         }
         $upload_dir = wp_upload_dir(); // Set upload folder
         $unique_file_name = wp_unique_filename($upload_dir['path'], $image_name); // Generate unique name
@@ -623,8 +623,8 @@ class Wikibiographie
             '_biographie_custom_lieu_deces' => sanitize_text_field($_POST['_biographie_custom_lieu_deces']),
             '_biographie_custom_occupation' => sanitize_text_field($_POST['_biographie_custom_occupation']),
             '_biographie_custom_site_officiel' => sanitize_text_field($_POST['_biographie_custom_site_officiel']),
-            '_biographie_custom_description' => sanitize_text_field($_POST['_biographie_custom_description']),
-            '_biographie_custom_description_complementaire' => sanitize_text_field($_POST['_biographie_custom_description_complementaire']),
+            '_biographie_custom_description' => sanitize_text_field(htmlentities($_POST['_biographie_custom_description'])),
+            '_biographie_custom_description_complementaire' => sanitize_text_field(htmlentities($_POST['_biographie_custom_description_complementaire'])),
         ];
 
         foreach ($custom_values as $key => $value) {
@@ -639,6 +639,17 @@ class Wikibiographie
                 $this->set_biographie_featured_image($post_id, $wiki_image_url);
             }
         }
+
+        $first_name = get_post_meta($post_id, '_biographie_custom_first_name', true);
+        if (empty($first_name)) {
+            $first_name = get_post_meta($post_id, '_biographie_wiki_first_name', true);
+        }
+        $last_name = get_post_meta($post_id, '_biographie_custom_last_name', true);
+        if (empty($last_name)) {
+            $last_name = get_post_meta($post_id, '_biographie_wiki_last_name', true);
+        }
+        update_post_meta($post_id, '_biographie_last_name', $last_name);
+        update_post_meta($post_id, '_biographie_first_name', $first_name);
     }
 
     public function get_cached_wiki_data($post_id, $url = null)
@@ -670,7 +681,7 @@ class Wikibiographie
     public function cache_wiki_data($post_id, $wiki_data)
     {
         if (!is_array($wiki_data)) {
-            throw new Exception('Le type des données Wiki à mettre en cache doit être \'array\'');
+            throw new Exception(__('The type of data to be added to the cache must be array.', 'wikibiographie'));
         }
         $wiki_values = [
             '_biographie_wiki_first_name' => $wiki_data['firstName'],
@@ -751,8 +762,20 @@ class Wikibiographie
     public function order_archive_by_title($query)
     {
         if (is_archive() && get_query_var('post_type') === self::POST_TYPE) {
-            $query->set('order', 'ASC');
-            $query->set('orderby', 'title');
+            $query->set('meta_query', [
+                'last_name' => [
+                    'key'     => '_biographie_last_name',
+                    'compare' => 'EXISTS',
+                ],
+                'first_name' => [
+                    'key'     => '_biographie_first_name',
+                    'compare' => 'EXISTS',
+                ],
+            ]);
+            $query->set('orderby', [
+                'last_name' => 'ASC',
+                'first_name' => 'ASC',
+            ]);
 
             if (!empty(get_query_var('biographie_s'))) {
                 $query->set('s', get_query_var('biographie_s'));

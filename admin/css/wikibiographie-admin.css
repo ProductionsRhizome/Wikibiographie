@@ -80,3 +80,12 @@ img.loading-gif { display: none; }
 }
 
 textarea, select, input, button { outline: none; }
+
+div.mce-tinymce {
+    border: 1px solid #E8E8E8 !important;
+    border-radius: 3px;
+}
+
+.tmce-active {
+    display: none;
+}

@@ -4,14 +4,14 @@
     ?>
 <div class="default-max-width">
 
-    <a href="<?php echo get_post_type_archive_link('biographie'); ?>">Toutes les biographies</a>
+    <a href="<?php echo get_post_type_archive_link('biographie'); ?>"><?php _e('All biographies', 'wikibiographie'); ?></a>
 
-    <h2><?php _e("Biographie de : "); ?><?php the_title(); ?></h2>
+    <h2><?php _e("Biography of : ", 'wikibiographie'); ?><?php the_title(); ?></h2>
 
     <table class="bio-table">
         <?php if(!empty($bio['first_name'])): ?>
             <tr>
-                <th>Prénom</th>
+                <th><?php _e('First name', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['first_name']); ?>
                 </td>
@@ -19,7 +19,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['last_name'])): ?>
             <tr>
-                <th>Nom</th>
+                <th><?php _e('Last name', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['last_name']); ?>
                 </td>
@@ -27,15 +27,15 @@
         <?php endif; ?>
         <?php if(!empty($bio['image'])): ?>
             <tr>
-                <th>Photo</th>
+                <th><?php _e('Photo', 'wikibiographie'); ?></th>
                 <td>
-                    <img src="<?php echo esc_url($bio['image']); ?>" alt="Photo de <?php the_title(); ?>" style="max-width: 200px;">
+                    <img src="<?php echo esc_url($bio['image']); ?>" alt="<?php _e('Photo of', 'wikibiographie'); ?> <?php the_title(); ?>" style="max-width: 200px;">
                 </td>
             </tr>
         <?php endif; ?>
         <?php if(!empty($bio['pseudo'])): ?>
             <tr>
-                <th>Pseudonyme</th>
+                <th><?php _e('Nickname', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['pseudo']); ?>
                 </td>
@@ -43,7 +43,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['dob'])): ?>
             <tr>
-                <th>Date de naissance</th>
+                <th><?php _e('Date of birth', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['dob']); ?>
                 </td>
@@ -51,7 +51,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['pob'])): ?>
             <tr>
-                <th>Lieu de naissance</th>
+                <th><?php _e('Place of birth', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['pob']); ?>
                 </td>
@@ -59,7 +59,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['dod'])): ?>
             <tr>
-                <th>Date de décès</th>
+                <th><?php _e('Date of death', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['dod']); ?>
                 </td>
@@ -67,7 +67,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['pod'])): ?>
             <tr>
-                <th>Lieu de décès</th>
+                <th><?php _e('Place of death', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['pod']); ?>
                 </td>
@@ -75,7 +75,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['occupation'])): ?>
             <tr>
-                <th>Occupation</th>
+                <th><?php _e('Occupation', 'wikibiographie'); ?></th>
                 <td>
                     <?php echo esc_attr($bio['occupation']); ?>
                 </td>
@@ -83,7 +83,7 @@
         <?php endif; ?>
         <?php if(!empty($bio['website'])): ?>
             <tr>
-                <th>Site web</th>
+                <th><?php _e('Official website', 'wikibiographie'); ?></th>
                 <td>
                     <a href="<?php echo esc_url($bio['website']); ?>" target="_blank"><?php echo esc_url($bio['website']); ?></a>
                 </td>
@@ -91,11 +91,11 @@
         <?php endif; ?>
         <?php if(!empty($bio['introduction']) || !empty($bio['introduction_complement'])): ?>
             <tr>
-                <th>Description</th>
+                <th><?php _e('Description', 'wikibiographie') ?></th>
                 <td>
-                    <?php echo esc_textarea($bio['introduction']); ?>
+                    <?php echo html_entity_decode($bio['introduction']); ?>
                     <?php if(!empty($bio['introduction_complement'])): ?>
-                        <?php echo esc_textarea($bio['introduction_complement']); ?>
+                        <?php echo html_entity_decode($bio['introduction_complement']); ?>
                     <?php endif; ?>
                 </td>
             </tr>
@@ -104,7 +104,7 @@
 
     <?php if(!empty($bio['wikipedia_url'])): ?>
         <div class="source">
-            <a target="_blank" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr">Contenu soumis à la licence CC-BY-SA 3.0</a>. Source : Article <em><a target="_blank" href="<?php echo esc_url($bio['wikipedia_url']) ?>"><?php echo the_title(); ?></a></em> de <a target="_blank" href="https://www.wikipedia.org/">Wikipédia</a></div>
+            <a target="_blank" href="https://creativecommons.org/licenses/by-sa/3.0/deed.fr"><?php _e('Content comply to CC-BY-SA 3.0 licence', 'wikibiographie'); ?></a>. <?php _e('Source : Article', 'wikibiographie'); ?> <em><a target="_blank" href="<?php echo esc_url($bio['wikipedia_url']) ?>"><?php echo the_title(); ?></a></em> de <a target="_blank" href="https://www.wikipedia.org/"><?php _e('Wikipedia', 'wikibiographie'); ?></a></div>
         </div>
     <?php endif; ?>
 
