@@ -4,7 +4,7 @@ Cette extension offre la gestion de biographies dont le contenu peut être synch
 
 ## Guide de l'utilisateur
 
-[Consulter le guide de l'utilisateur (pdf)](https://productionsrhizome.org/wp-content/uploads/WikiBiographie_guide_utilisateur_De%CC%81cembre-20-22.pdf)  
+[Consulter le guide de l'utilisateur (pdf)](https://productionsrhizome.org/wp-content/uploads/Rhizome_WikiBiographie_guidedutilisation_V2.pdf)  
 
 ## Installation de l'extension
 
