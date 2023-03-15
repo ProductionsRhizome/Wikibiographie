@@ -763,24 +763,25 @@ class Wikibiographie
     {
         if (is_archive() && get_query_var('post_type') === self::POST_TYPE) {
             $query->set('meta_query', [
-                'last_name' => [
-                    'relation' => 'OR',
-                    [
+                'relation' => 'OR',
+                [
+                    'relation' => 'AND',
+                    'last_name' => [
                         'key'     => '_biographie_last_name',
                         'compare' => 'EXISTS',
                     ],
-                    [
-                        'key'     => '_biographie_last_name',
-                        'compare' => 'NOT EXISTS',
-                    ],
-                ],
-                'first_name' => [
-                    'relation' => 'OR',
-                    [
+                    'first_name' => [
                         'key'     => '_biographie_first_name',
                         'compare' => 'EXISTS',
                     ],
-                    [
+                ],
+                [
+                    'relation' => 'AND',
+                    'last_name' => [
+                        'key'     => '_biographie_last_name',
+                        'compare' => 'NOT EXISTS',
+                    ],
+                    'first_name' => [
                         'key'     => '_biographie_first_name',
                         'compare' => 'NOT EXISTS',
                     ],
